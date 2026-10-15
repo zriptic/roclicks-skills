@@ -1,0 +1,1115 @@
+{
+  "game": "Pet Roll Example",
+  "title": "🥚 Pet Roll",
+  "notes": "Worked example (references/worked-example.md) for a pet-hatching roll game. Copy to <game>/trailer/shots.json and rename tags, remotes, prompt text and module names to match your game. Offsets are first guesses: fix them after one test take of each shot. Server snippets call the game's own modules (src/server) directly so they are easy to read; because eval_server_runtime gets a fresh require cache, route them through a TrailerHook BindableFunction in practice (SKILL.md, Known gaps).",
+  "record": {
+    "preroll": 1.0,
+    "tail": 0.6,
+    "delay": 6
+  },
+  "shots": [
+    {
+      "id": "s01_flyover",
+      "kind": "cinematic",
+      "dur": 5.0,
+      "hud": false,
+      "camera": {
+        "preset": "flyover",
+        "dur": 5.0,
+        "ease": "sineInOut",
+        "points": [
+          {
+            "tag": "Vault",
+            "offset": [
+              -140,
+              90,
+              -120
+            ]
+          },
+          {
+            "tag": "Vault",
+            "offset": [
+              -40,
+              55,
+              -30
+            ]
+          },
+          {
+            "tag": "RollStage",
+            "offset": [
+              -35,
+              30,
+              45
+            ]
+          },
+          {
+            "tag": "RollStage",
+            "offset": [
+              0,
+              14,
+              30
+            ]
+          }
+        ],
+        "look": {
+          "tag": "RollStage",
+          "offset": [
+            0,
+            4,
+            0
+          ]
+        },
+        "fov0": 75,
+        "fov1": 62,
+        "shake": {
+          "amp": 0.06,
+          "freq": 0.35
+        }
+      }
+    },
+    {
+      "id": "s02_roll",
+      "kind": "gameplay",
+      "dur": 9.0,
+      "hud": true,
+      "start": {
+        "at": {
+          "tag": "RollCabinet",
+          "localOffset": [
+            0,
+            0,
+            -12
+          ]
+        },
+        "face": {
+          "tag": "RollCabinet"
+        }
+      },
+      "player": {
+        "dist": 12,
+        "pitch": -12,
+        "glances": false
+      },
+      "server": [
+        "local G = game:GetService('ServerScriptService'):WaitForChild('GameServer')",
+        "local PS = require(G.PlayerState)",
+        "for _, p in game:GetService('Players'):GetPlayers() do PS.addCash(p, 5000, 'trailer') end"
+      ],
+      "timeline": [
+        {
+          "t": 0.2,
+          "do": "walk",
+          "to": {
+            "tag": "RollCabinet",
+            "localOffset": [
+              0,
+              0,
+              -5
+            ]
+          },
+          "jitter": 0.4
+        },
+        {
+          "t": 1.5,
+          "do": "face",
+          "target": {
+            "tag": "RollCabinet"
+          },
+          "time": 0.3
+        },
+        {
+          "t": 1.9,
+          "do": "prompt",
+          "match": "roll -",
+          "near": {
+            "tag": "RollCabinet"
+          },
+          "radius": 30
+        },
+        {
+          "t": 2.2,
+          "do": "camera",
+          "blend": 0.45,
+          "spec": {
+            "preset": "pushin",
+            "dur": 5.0,
+            "center": {
+              "tag": "RollStage"
+            },
+            "lookHeight": 4,
+            "from": {
+              "player": "self",
+              "offset": [
+                0,
+                6,
+                0
+              ]
+            },
+            "dist0": 26,
+            "dist1": 13,
+            "ease": "quadOut"
+          }
+        },
+        {
+          "on": {
+            "event": "ReplicatedStorage.Remotes.Reveal",
+            "arg1": "Roll",
+            "delay": 1.4
+          },
+          "do": "camera",
+          "preset": "player",
+          "blend": 0.6
+        }
+      ]
+    },
+    {
+      "id": "s03_hatch",
+      "kind": "gameplay",
+      "dur": 7.5,
+      "hud": true,
+      "start": {
+        "at": {
+          "tag": "RollStage",
+          "localOffset": [
+            14,
+            0,
+            -10
+          ]
+        }
+      },
+      "player": {
+        "dist": 11,
+        "pitch": -18
+      },
+      "server": [
+        "local G = game:GetService('ServerScriptService'):WaitForChild('GameServer')",
+        "local PS, Hatch = require(G.PlayerState), require(G.Hatch)",
+        "local p = game:GetService('Players'):GetPlayers()[1]",
+        "local id = PS.addItem(p, { kind = 'Egg', egg = 'DragonEgg', animal = 'DRAGON', tier = 'Rainbow', size = 'Giant', hatchAt = os.time() + 600 })",
+        "Hatch.makeReady(p, id)",
+        "p:SetAttribute('TrailerEgg', id)",
+        "return id"
+      ],
+      "timeline": [
+        {
+          "t": 0.5,
+          "do": "invoke",
+          "remote": "ReplicatedStorage.Remotes.Action",
+          "args": [
+            "Equip",
+            {
+              "id": "$attr:TrailerEgg"
+            }
+          ]
+        },
+        {
+          "t": 1.3,
+          "do": "look",
+          "pitch": -6,
+          "time": 0.5
+        },
+        {
+          "t": 1.8,
+          "do": "invoke",
+          "remote": "ReplicatedStorage.Remotes.Action",
+          "args": [
+            "HatchEgg",
+            {}
+          ]
+        },
+        {
+          "on": {
+            "childAdded": "Workspace.Hatching",
+            "delay": 0.05
+          },
+          "do": "camera",
+          "blend": 0.3,
+          "spec": {
+            "preset": "pushin",
+            "dur": 3.6,
+            "center": {
+              "path": "Workspace.Hatching"
+            },
+            "lookHeight": 1.5,
+            "from": {
+              "player": "self",
+              "offset": [
+                3,
+                5,
+                0
+              ]
+            },
+            "dist0": 13,
+            "dist1": 7,
+            "ease": "sineOut"
+          }
+        },
+        {
+          "t": 6.2,
+          "do": "camera",
+          "preset": "player",
+          "blend": 0.5
+        }
+      ]
+    },
+    {
+      "id": "s04a_mutate_gold",
+      "kind": "gameplay",
+      "dur": 6.0,
+      "hud": true,
+      "start": {
+        "at": {
+          "tag": "MutationStage",
+          "localOffset": [
+            0,
+            0,
+            -14
+          ]
+        },
+        "face": {
+          "tag": "MutationStage"
+        }
+      },
+      "player": {
+        "dist": 12,
+        "pitch": -10,
+        "glances": false
+      },
+      "server": [
+        "local G = game:GetService('ServerScriptService'):WaitForChild('GameServer')",
+        "local PS, Inv = require(G.PlayerState), require(G.Inventory)",
+        "local MC = require(game:GetService('ReplicatedStorage').Game.MetaConfig)",
+        "local p = game:GetService('Players'):GetPlayers()[1]",
+        "_G.TrailerOdds = _G.TrailerOdds or table.clone(MC.Mutation.UpgradeOdds)",
+        "MC.Mutation.UpgradeOdds.Diamond = 1  -- take until success; one real step, Gold -> Diamond",
+        "local id = PS.addItem(p, { kind = 'Animal', egg = 'KrakenEgg', animal = 'KRAKEN', tier = 'Gold', size = 'Normal' })",
+        "Inv.equip(p, id)",
+        "p:SetAttribute('TrailerAnimal', id)"
+      ],
+      "server_after": [
+        "local MC = require(game:GetService('ReplicatedStorage').Game.MetaConfig)",
+        "if _G.TrailerOdds then for k, v in _G.TrailerOdds do MC.Mutation.UpgradeOdds[k] = v end end"
+      ],
+      "timeline": [
+        {
+          "t": 0.2,
+          "do": "walk",
+          "to": {
+            "tag": "MutationStage",
+            "localOffset": [
+              0,
+              0,
+              -6
+            ]
+          }
+        },
+        {
+          "t": 1.3,
+          "do": "prompt",
+          "match": "mutate",
+          "near": {
+            "tag": "MutationStage"
+          },
+          "radius": 30
+        },
+        {
+          "t": 1.8,
+          "do": "invoke",
+          "remote": "ReplicatedStorage.Remotes.Action",
+          "args": [
+            "MutateSkip",
+            {}
+          ]
+        },
+        {
+          "t": 2.4,
+          "do": "camera",
+          "blend": 0.3,
+          "spec": {
+            "preset": "pushin",
+            "dur": 3.4,
+            "center": {
+              "tag": "MutationStage"
+            },
+            "lookHeight": 3,
+            "angle": 200,
+            "rise": 0.25,
+            "dist0": 16,
+            "dist1": 9,
+            "ease": "quadOut"
+          }
+        },
+        {
+          "t": 2.6,
+          "do": "invoke",
+          "remote": "ReplicatedStorage.Remotes.Action",
+          "args": [
+            "MutateCollect",
+            {}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s04b_mutate_diamond",
+      "kind": "gameplay",
+      "dur": 6.0,
+      "hud": true,
+      "start": {
+        "at": {
+          "tag": "MutationStage",
+          "localOffset": [
+            0,
+            0,
+            -14
+          ]
+        },
+        "face": {
+          "tag": "MutationStage"
+        }
+      },
+      "player": {
+        "dist": 12,
+        "pitch": -10,
+        "glances": false
+      },
+      "server": [
+        "local G = game:GetService('ServerScriptService'):WaitForChild('GameServer')",
+        "local PS, Inv = require(G.PlayerState), require(G.Inventory)",
+        "local MC = require(game:GetService('ReplicatedStorage').Game.MetaConfig)",
+        "local p = game:GetService('Players'):GetPlayers()[1]",
+        "_G.TrailerOdds = _G.TrailerOdds or table.clone(MC.Mutation.UpgradeOdds)",
+        "MC.Mutation.UpgradeOdds.Galaxy = 1",
+        "local id = p:GetAttribute('TrailerAnimal')",
+        "Inv.equip(p, id)"
+      ],
+      "server_after": [
+        "local MC = require(game:GetService('ReplicatedStorage').Game.MetaConfig)",
+        "if _G.TrailerOdds then for k, v in _G.TrailerOdds do MC.Mutation.UpgradeOdds[k] = v end end"
+      ],
+      "timeline": [
+        {
+          "t": 0.2,
+          "do": "walk",
+          "to": {
+            "tag": "MutationStage",
+            "localOffset": [
+              0,
+              0,
+              -6
+            ]
+          }
+        },
+        {
+          "t": 1.3,
+          "do": "prompt",
+          "match": "mutate",
+          "near": {
+            "tag": "MutationStage"
+          },
+          "radius": 30
+        },
+        {
+          "t": 1.8,
+          "do": "invoke",
+          "remote": "ReplicatedStorage.Remotes.Action",
+          "args": [
+            "MutateSkip",
+            {}
+          ]
+        },
+        {
+          "t": 2.4,
+          "do": "camera",
+          "blend": 0.3,
+          "spec": {
+            "preset": "pushin",
+            "dur": 3.4,
+            "center": {
+              "tag": "MutationStage"
+            },
+            "lookHeight": 3,
+            "angle": 160,
+            "rise": 0.25,
+            "dist0": 16,
+            "dist1": 9,
+            "ease": "quadOut"
+          }
+        },
+        {
+          "t": 2.6,
+          "do": "invoke",
+          "remote": "ReplicatedStorage.Remotes.Action",
+          "args": [
+            "MutateCollect",
+            {}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s04c_mutate_rainbow",
+      "kind": "gameplay",
+      "dur": 6.5,
+      "hud": true,
+      "start": {
+        "at": {
+          "tag": "MutationStage",
+          "localOffset": [
+            0,
+            0,
+            -14
+          ]
+        },
+        "face": {
+          "tag": "MutationStage"
+        }
+      },
+      "player": {
+        "dist": 12,
+        "pitch": -10,
+        "glances": false
+      },
+      "server": [
+        "local G = game:GetService('ServerScriptService'):WaitForChild('GameServer')",
+        "local PS, Inv = require(G.PlayerState), require(G.Inventory)",
+        "local MC = require(game:GetService('ReplicatedStorage').Game.MetaConfig)",
+        "local p = game:GetService('Players'):GetPlayers()[1]",
+        "_G.TrailerOdds = _G.TrailerOdds or table.clone(MC.Mutation.UpgradeOdds)",
+        "MC.Mutation.UpgradeOdds.Rainbow = 1",
+        "local id = p:GetAttribute('TrailerAnimal')",
+        "Inv.equip(p, id)"
+      ],
+      "server_after": [
+        "local MC = require(game:GetService('ReplicatedStorage').Game.MetaConfig)",
+        "if _G.TrailerOdds then for k, v in _G.TrailerOdds do MC.Mutation.UpgradeOdds[k] = v end; _G.TrailerOdds = nil end"
+      ],
+      "timeline": [
+        {
+          "t": 0.2,
+          "do": "walk",
+          "to": {
+            "tag": "MutationStage",
+            "localOffset": [
+              0,
+              0,
+              -6
+            ]
+          }
+        },
+        {
+          "t": 1.3,
+          "do": "prompt",
+          "match": "mutate",
+          "near": {
+            "tag": "MutationStage"
+          },
+          "radius": 30
+        },
+        {
+          "t": 1.8,
+          "do": "invoke",
+          "remote": "ReplicatedStorage.Remotes.Action",
+          "args": [
+            "MutateSkip",
+            {}
+          ]
+        },
+        {
+          "t": 2.4,
+          "do": "camera",
+          "blend": 0.3,
+          "spec": {
+            "preset": "orbit",
+            "dur": 4.0,
+            "center": {
+              "tag": "MutationStage"
+            },
+            "radius": 13,
+            "radius1": 9,
+            "height": 5,
+            "height1": 3.5,
+            "from": 200,
+            "sweep": -50,
+            "lookHeight": 3,
+            "ease": "quadOut"
+          }
+        },
+        {
+          "t": 2.6,
+          "do": "invoke",
+          "remote": "ReplicatedStorage.Remotes.Action",
+          "args": [
+            "MutateCollect",
+            {}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "p05_base_prep",
+      "kind": "prep",
+      "dur": 14.0,
+      "server": [
+        "local G = game:GetService('ServerScriptService'):WaitForChild('GameServer')",
+        "local PS = require(G.PlayerState)",
+        "local p = game:GetService('Players'):GetPlayers()[1]",
+        "local a = PS.addItem(p, { kind = 'Animal', egg = 'HydraEgg', animal = 'HYDRA', tier = 'Galaxy', size = 'Giant' })",
+        "local b = PS.addItem(p, { kind = 'Animal', egg = 'PhoenixEgg', animal = 'PHOENIX', tier = 'Rainbow', size = 'Normal' })",
+        "local c = PS.addItem(p, { kind = 'Animal', egg = 'WyvernEgg', animal = 'WYVERN', tier = 'Diamond', size = 'Titanic' })",
+        "p:SetAttribute('TrailerA1', a); p:SetAttribute('TrailerA2', b); p:SetAttribute('TrailerA3', c)"
+      ],
+      "start": {
+        "at": {
+          "tag": "Vault",
+          "localOffset": [
+            0,
+            0,
+            -6
+          ]
+        }
+      },
+      "timeline": [
+        {
+          "t": 0.5,
+          "do": "invoke",
+          "remote": "ReplicatedStorage.Remotes.Action",
+          "args": [
+            "Equip",
+            {
+              "id": "$attr:TrailerA1"
+            }
+          ]
+        },
+        {
+          "t": 1.0,
+          "do": "invoke",
+          "remote": "ReplicatedStorage.Remotes.Action",
+          "args": [
+            "Place",
+            {
+              "index": 1
+            }
+          ]
+        },
+        {
+          "t": 1.6,
+          "do": "invoke",
+          "remote": "ReplicatedStorage.Remotes.Action",
+          "args": [
+            "Equip",
+            {
+              "id": "$attr:TrailerA2"
+            }
+          ]
+        },
+        {
+          "t": 2.1,
+          "do": "invoke",
+          "remote": "ReplicatedStorage.Remotes.Action",
+          "args": [
+            "Place",
+            {
+              "index": 2
+            }
+          ]
+        },
+        {
+          "t": 2.7,
+          "do": "invoke",
+          "remote": "ReplicatedStorage.Remotes.Action",
+          "args": [
+            "Equip",
+            {
+              "id": "$attr:TrailerA3"
+            }
+          ]
+        },
+        {
+          "t": 3.2,
+          "do": "invoke",
+          "remote": "ReplicatedStorage.Remotes.Action",
+          "args": [
+            "Place",
+            {
+              "index": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s05_base_cash",
+      "kind": "gameplay",
+      "dur": 8.0,
+      "hud": false,
+      "start": {
+        "at": {
+          "tag": "Vault",
+          "localOffset": [
+            0,
+            0,
+            -4
+          ]
+        }
+      },
+      "player": {
+        "dist": 13,
+        "pitch": -15
+      },
+      "camera": {
+        "preset": "orbit",
+        "dur": 3.2,
+        "center": {
+          "tag": "Vault"
+        },
+        "radius": 26,
+        "height": 12,
+        "height1": 8,
+        "from": 150,
+        "sweep": 55,
+        "lookHeight": 3,
+        "ease": "sineInOut"
+      },
+      "timeline": [
+        {
+          "t": 3.2,
+          "do": "hud",
+          "show": true
+        },
+        {
+          "t": 3.2,
+          "do": "camera",
+          "preset": "player",
+          "blend": 0.5
+        },
+        {
+          "t": 3.4,
+          "do": "walk",
+          "to": {
+            "tag": "CollectPad"
+          },
+          "reach": 0.6
+        },
+        {
+          "t": 5.6,
+          "do": "look",
+          "pitch": 6,
+          "time": 0.7
+        }
+      ]
+    },
+    {
+      "id": "s06_trade",
+      "kind": "gameplay",
+      "dur": 9.0,
+      "hud": true,
+      "needs_players": 2,
+      "start": {
+        "at": {
+          "tag": "TradePad",
+          "attrs": {
+            "LaneId": 1,
+            "Side": "A",
+            "Action": "Add"
+          },
+          "localOffset": [
+            0,
+            0,
+            -7
+          ]
+        }
+      },
+      "player": {
+        "dist": 12,
+        "pitch": -14,
+        "glances": false
+      },
+      "server": [
+        "local G = game:GetService('ServerScriptService'):WaitForChild('GameServer')",
+        "local PS = require(G.PlayerState)",
+        "local ps = game:GetService('Players'):GetPlayers()",
+        "table.sort(ps, function(a, b) return a.UserId < b.UserId end)",
+        "for i, p in ps do",
+        "  local id = PS.addItem(p, { kind = 'Animal', egg = (i == 1 and 'LeviathanEgg' or 'KrakenEgg'), animal = (i == 1 and 'LEVIATHAN' or 'KRAKEN'), tier = (i == 1 and 'Diamond' or 'Rainbow'), size = 'Normal' })",
+        "  p:SetAttribute('TrailerTradeItem', id)",
+        "end"
+      ],
+      "timeline": [
+        {
+          "t": 0.2,
+          "do": "walk",
+          "to": {
+            "tag": "TradePad",
+            "attrs": {
+              "LaneId": 1,
+              "Side": "A",
+              "Action": "Add"
+            }
+          },
+          "reach": 0.8
+        },
+        {
+          "t": 2.6,
+          "do": "invoke",
+          "remote": "ReplicatedStorage.Remotes.Action",
+          "args": [
+            "TradeAdd",
+            {
+              "id": "$attr:TrailerTradeItem"
+            }
+          ]
+        },
+        {
+          "t": 3.2,
+          "do": "camera",
+          "blend": 0.4,
+          "spec": {
+            "preset": "orbit",
+            "dur": 4.5,
+            "center": {
+              "tag": "TradeLane",
+              "attrs": {
+                "LaneId": 1
+              }
+            },
+            "radius": 20,
+            "height": 9,
+            "from": 90,
+            "sweep": 35,
+            "lookHeight": 2
+          }
+        },
+        {
+          "t": 5.0,
+          "do": "walk",
+          "to": {
+            "tag": "TradePad",
+            "attrs": {
+              "LaneId": 1,
+              "Side": "A",
+              "Action": "Accept"
+            }
+          },
+          "reach": 0.8
+        }
+      ],
+      "actors": {
+        "client-2": {
+          "start": {
+            "at": {
+              "tag": "TradePad",
+              "attrs": {
+                "LaneId": 1,
+                "Side": "B",
+                "Action": "Add"
+              },
+              "localOffset": [
+                0,
+                0,
+                -6
+              ]
+            }
+          },
+          "timeline": [
+            {
+              "t": 0.5,
+              "do": "walk",
+              "to": {
+                "tag": "TradePad",
+                "attrs": {
+                  "LaneId": 1,
+                  "Side": "B",
+                  "Action": "Add"
+                }
+              },
+              "reach": 0.8
+            },
+            {
+              "t": 3.0,
+              "do": "invoke",
+              "remote": "ReplicatedStorage.Remotes.Action",
+              "args": [
+                "TradeAdd",
+                {
+                  "id": "$attr:TrailerTradeItem"
+                }
+              ]
+            },
+            {
+              "t": 5.4,
+              "do": "walk",
+              "to": {
+                "tag": "TradePad",
+                "attrs": {
+                  "LaneId": 1,
+                  "Side": "B",
+                  "Action": "Accept"
+                }
+              },
+              "reach": 0.8
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "s07_wheel",
+      "kind": "gameplay",
+      "dur": 9.0,
+      "hud": true,
+      "start": {
+        "at": {
+          "tag": "LuckyWheel",
+          "localOffset": [
+            0,
+            0,
+            -16
+          ]
+        },
+        "face": {
+          "tag": "LuckyWheel"
+        }
+      },
+      "player": {
+        "dist": 13,
+        "pitch": -8,
+        "glances": false
+      },
+      "server": [
+        "local G = game:GetService('ServerScriptService'):WaitForChild('GameServer')",
+        "local Wheel = require(G.Wheel)",
+        "for _, p in game:GetService('Players'):GetPlayers() do Wheel.addSpins(p, 1) end"
+      ],
+      "timeline": [
+        {
+          "t": 0.2,
+          "do": "walk",
+          "to": {
+            "tag": "LuckyWheel",
+            "localOffset": [
+              0,
+              0,
+              -9
+            ]
+          }
+        },
+        {
+          "t": 1.4,
+          "do": "prompt",
+          "match": "spin",
+          "near": {
+            "tag": "LuckyWheel"
+          },
+          "radius": 40
+        },
+        {
+          "t": 1.6,
+          "do": "camera",
+          "blend": 0.5,
+          "spec": {
+            "preset": "pushin",
+            "dur": 6.5,
+            "center": {
+              "tag": "WheelSpinner"
+            },
+            "angle": 180,
+            "rise": 0.12,
+            "dist0": 30,
+            "dist1": 17,
+            "ease": "sineOut"
+          }
+        }
+      ]
+    }
+  ],
+  "edit": {
+    "size": [
+      1920,
+      1080
+    ],
+    "fps": 60,
+    "font": "Fredoka One",
+    "music": {
+      "file": "",
+      "start": 0,
+      "gain_db": -2,
+      "fade_out": 1.5
+    },
+    "sfx": [],
+    "duck": [],
+    "duck_db": -9,
+    "loudness": -14,
+    "vertical": {
+      "mode": "crop"
+    },
+    "sequence": [
+      {
+        "shot": "s01_flyover",
+        "in": 0.0,
+        "out": 4.6,
+        "ramp": [
+          [
+            0,
+            1.9
+          ],
+          [
+            2.6,
+            1.5
+          ],
+          [
+            4.6,
+            1.0
+          ]
+        ]
+      },
+      {
+        "shot": "s02_roll",
+        "in": 1.6,
+        "out": 6.2,
+        "speed": 1.15,
+        "transition": {
+          "type": "whip",
+          "dur": 0.22
+        },
+        "focus_x": 0.5
+      },
+      {
+        "shot": "s03_hatch",
+        "in": 2.0,
+        "out": 5.6,
+        "ramp": [
+          [
+            0,
+            1.1
+          ],
+          [
+            1.0,
+            1.0
+          ],
+          [
+            1.4,
+            0.5
+          ],
+          [
+            2.2,
+            0.5
+          ],
+          [
+            2.8,
+            1.0
+          ]
+        ],
+        "transition": {
+          "type": "fade",
+          "dur": 0.25
+        }
+      },
+      {
+        "shot": "s04a_mutate_gold",
+        "in": 2.4,
+        "out": 3.9,
+        "transition": {
+          "type": "whip",
+          "dur": 0.2
+        }
+      },
+      {
+        "shot": "s04b_mutate_diamond",
+        "in": 2.4,
+        "out": 3.9,
+        "transition": {
+          "type": "cut"
+        }
+      },
+      {
+        "shot": "s04c_mutate_rainbow",
+        "in": 2.4,
+        "out": 4.4,
+        "ramp": [
+          [
+            0,
+            1.0
+          ],
+          [
+            0.8,
+            0.6
+          ],
+          [
+            2.0,
+            0.9
+          ]
+        ],
+        "transition": {
+          "type": "cut"
+        }
+      },
+      {
+        "shot": "s05_base_cash",
+        "in": 0.5,
+        "out": 6.0,
+        "speed": 1.5,
+        "transition": {
+          "type": "fade",
+          "dur": 0.3
+        }
+      },
+      {
+        "shot": "s06_trade",
+        "in": 1.8,
+        "out": 7.5,
+        "speed": 1.6,
+        "transition": {
+          "type": "whip",
+          "dur": 0.22
+        }
+      },
+      {
+        "shot": "s07_wheel",
+        "in": 2.0,
+        "out": 7.6,
+        "ramp": [
+          [
+            0,
+            1.7
+          ],
+          [
+            3.6,
+            1.4
+          ],
+          [
+            5.6,
+            0.9
+          ]
+        ],
+        "transition": {
+          "type": "whipblur",
+          "dur": 0.25
+        }
+      },
+      {
+        "card": "title",
+        "text": "🥚 Pet Roll",
+        "dur": 2.5,
+        "bg_shot": "s01_flyover",
+        "bg_t": 4.0,
+        "transition": {
+          "type": "flash",
+          "dur": 0.3
+        }
+      },
+      {
+        "card": "text",
+        "text": "Play free on Roblox",
+        "sub": "🥚 Pet Roll",
+        "dur": 1.6,
+        "size": 110,
+        "social_only": true,
+        "transition": {
+          "type": "fade",
+          "dur": 0.25
+        }
+      }
+    ]
+  }
+}

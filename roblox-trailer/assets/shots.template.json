@@ -1,0 +1,42 @@
+{
+  "game": "My Game",
+  "title": "My Game",
+  "record": { "preroll": 1.0, "tail": 0.6, "delay": 6 },
+  "shots": [
+    {
+      "id": "s01_reveal",
+      "kind": "cinematic",
+      "dur": 5.0,
+      "camera": { "preset": "crane", "dur": 5.0, "center": { "tag": "MainMachine" }, "angle": 30,
+                  "dist0": 12, "dist1": 40, "h0": 2, "h1": 30, "ease": "sineInOut" }
+    },
+    {
+      "id": "s02_core",
+      "kind": "gameplay",
+      "dur": 8.0,
+      "start": { "at": { "tag": "MainMachine", "localOffset": [0, 0, -12] }, "face": { "tag": "MainMachine" } },
+      "server": "-- optional: give the player what the shot needs, using the game's own modules",
+      "timeline": [
+        { "t": 0.3, "do": "walk", "to": { "tag": "MainMachine", "localOffset": [0, 0, -5] }, "jitter": 0.4 },
+        { "t": 1.6, "do": "prompt", "match": "use", "near": { "tag": "MainMachine" } },
+        { "on": { "event": "ReplicatedStorage.Remotes.Result" }, "do": "camera", "blend": 0.3,
+          "spec": { "preset": "pushin", "dur": 3, "center": { "tag": "MainMachine" }, "angle": 180, "dist0": 18, "dist1": 9 } },
+        { "t": 6.5, "do": "camera", "preset": "player", "blend": 0.5 }
+      ]
+    }
+  ],
+  "edit": {
+    "size": [1920, 1080], "fps": 60, "font": "Fredoka One",
+    "music": { "file": "", "start": 0, "gain_db": -2, "fade_out": 1.5 },
+    "sfx": [], "duck": [], "duck_db": -9, "loudness": -14,
+    "vertical": { "mode": "crop" },
+    "sequence": [
+      { "shot": "s01_reveal", "in": 0.0, "out": 4.5, "ramp": [[0, 1.6], [3.0, 1.0]] },
+      { "shot": "s02_core", "in": 1.2, "out": 6.5, "transition": { "type": "whip", "dur": 0.2 } },
+      { "card": "title", "text": "My Game", "dur": 2.5, "bg_shot": "s01_reveal", "bg_t": 4.0,
+        "transition": { "type": "flash", "dur": 0.3 } },
+      { "card": "text", "text": "Play free on Roblox", "dur": 1.6, "social_only": true,
+        "transition": { "type": "fade", "dur": 0.25 } }
+    ]
+  }
+}

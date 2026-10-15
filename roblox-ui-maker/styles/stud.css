@@ -1,0 +1,39 @@
+/* PRESET: stud (the default style). Chunky studded-plastic buttons, see-through dark glass panels,
+   heavy outlined text with tinted gradient fills. Every value here has a Roblox equivalent listed in
+   STYLE.md ("Token table"). A stud-like reference only needs a few overrides in style.css.
+   Load order on every page: kit.css -> styles/stud.css -> style.css (per-game tweaks). */
+:root {
+  /* ---- surfaces ---- */
+  --ink: #070a0e;                      /* the one near-black used for every outline */
+  --glass: rgba(8, 14, 22, .76);       /* panel body: see-through (alpha .70-.80), never opaque */
+  --glass-card: rgba(8, 14, 22, .80);  /* small cards / toasts */
+  --glass-rim: rgba(255, 255, 255, .10);
+  --panel-bw: 7px;  --panel-rad: 30px; --panel-ol: var(--ink);
+  /* ---- plates (buttons, tabs, headers) ---- */
+  --plate-ow: 6px;  --plate-rad: 20px;
+  /* stud texture: ui-resources "Stud texture" (download it from ui-resources.com
+     into ui/stud.png; 894 px tile = 4x4 studs).
+     Tiled at 112 px => one stud every 28 design px; overlay blend so it takes the plate's colour. */
+  --stud-img: url(stud.png); --stud: 112px; --stud-blend: overlay; --stud-op: .95; --head-stud-op: .95;
+  /* ---- text ---- */
+  --font: 'Montserrat', sans-serif;        /* Roblox: Montserrat ExtraBold (800) = the "Gotham Black" look */
+  --font2: 'Source Sans 3', sans-serif;    /* Roblox: SourceSansPro SemiBold: captions, key hints */
+  --text-ol: #121212;                      /* outline + drop colour (near-black; a tinted outline vanishes) */
+  --stroke-k: 1; --drop-k: 1;              /* scale all outlines / drops at once */
+  --text-fill: linear-gradient(#ffffff 52%, #e4e7ea);
+  /* ---- accents ---- */
+  --sel: #fff35a; --gold: #ffd23a;
+}
+body { font-family: var(--font); }
+/* colour ramps: outline, bright rim, side rim, top -> mid -> bottom face, dark lip (2 tones), text outline */
+.c-blue   { --ol: #04161d; --rim: #9fe6f5; --side: rgba(150,235,250,.55); --top: #7adcef; --mid: #57c6e8; --bot: #3cc6fb; --lip: #127aa5; --lip2: #0b5f84; --oc: #052230; }
+.c-green  { --ol: #031a06; --rim: #b2ff92; --side: rgba(170,255,140,.55); --top: #80ee5a; --mid: #4ced41; --bot: #20f633; --lip: #0aa31a; --lip2: #058212; --oc: #06300c; }
+.c-red    { --ol: #1c0204; --rim: #ffaab0; --side: rgba(255,160,165,.5);  --top: #ef747c; --mid: #e24b51; --bot: #f9505a; --lip: #9c1b1f; --lip2: #7a1418; --oc: #3a0509; }
+.c-yellow { --ol: #241500; --rim: #fff3b0; --side: rgba(255,240,170,.55); --top: #ffe47a; --mid: #ffc935; --bot: #ffbd0a; --lip: #b87400; --lip2: #8c5800; --oc: #3d2600; }
+.c-orange { --ol: #241000; --rim: #ffd2a6; --side: rgba(255,200,150,.55); --top: #ffb36a; --mid: #ff8f2e; --bot: #ff7d10; --lip: #b44c00; --lip2: #8a3800; --oc: #3d1a00; }
+.c-purple { --ol: #14041f; --rim: #e9c2ff; --side: rgba(225,180,255,.5);  --top: #cf8fff; --mid: #a95cf2; --bot: #9b45f7; --lip: #5c1d9c; --lip2: #46137a; --oc: #250a3d; }
+.c-grey   { --ol: #101316; --rim: #e9eef2; --side: rgba(230,236,240,.45); --top: #c3cad0; --mid: #9aa2a9; --bot: #8c959d; --lip: #4f575e; --lip2: #3c4349; --oc: #1a1e22; }
+.c-dark   { --ol: #06090c; --rim: #5d6a76; --side: rgba(110,125,140,.4);  --top: #46525d; --mid: #343e48; --bot: #2c353e; --lip: #161c22; --lip2: #0f1418; --oc: #06090c; }
+.c-gold   { --ol: #2a1700; --rim: #fff6c4; --side: rgba(255,245,190,.6);  --top: #fff07a; --mid: #ffd23a; --bot: #ffbf1c; --lip: #c27a00; --lip2: #965d00; --oc: #3d2600; }
+/* button states (all plates): hover = grow 1.06 + lift 3, press = 0.92 + sink 4 (runtime tweens do the
+   same), locked/unaffordable = .off (desaturate + darken) or a grey plate when the price must stay readable */

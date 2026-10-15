@@ -1,0 +1,15 @@
+{
+  "gui": "GameUI",
+  "templates_folder": "GameUITemplates",
+  "port": 8870,
+  "design": [1920, 1080],
+  "luau_out": "../roblox/ui",
+  "stud_asset": "",
+  "screens": [
+    {"name": "HUD", "page": "hud", "groups": ["Currencies", "LeftButtons", "Goal"], "visible": true, "hud": true},
+    {"name": "Shop", "page": "shop", "groups": ["Shop"]},
+    {"name": "CrateOpen", "page": "crate", "groups": ["CrateTitle", "Reel", "SkipHint"]},
+    {"name": "CrateOdds", "page": "crate_odds", "groups": ["CrateOdds"]}
+  ],
+  "templates": ["templates"]
+}

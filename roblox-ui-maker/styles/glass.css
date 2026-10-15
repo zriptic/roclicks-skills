@@ -1,0 +1,29 @@
+/* PRESET: glass (dark "simulator" style). Layered dark navy panels, NO studs on buttons (studs only on
+   the panel header strip), flat-ish rounded buttons with a thin black stroke, bold white text with a
+   thin black outline and no drop. Shows that only tokens change: same kit.css, same build.py.
+   Load order: kit.css -> styles/glass.css -> style.css. */
+:root {
+  --ink: #0b0d14;
+  --glass: rgba(19, 21, 31, .42);      /* Roblox: Frame RGB(19,21,31), BackgroundTransparency .58 */
+  --glass-card: rgba(19, 21, 31, .60);
+  --glass-rim: rgba(255, 255, 255, .06);
+  --panel-bw: 3px; --panel-rad: 16px; --panel-ol: #000;
+  --plate-ow: 3px; --plate-rad: 12px;
+  --stud-img: url(stud.png); --stud: 84px; --stud-blend: overlay; --stud-op: 0; --head-stud-op: .6;
+  --font: 'Montserrat', sans-serif;    /* Roblox: GothamSSm ExtraBold (closest web match: Montserrat 800) */
+  --font2: 'Source Sans 3', sans-serif;
+  --text-ol: #000; --stroke-k: .55; --drop-k: 0;
+  --text-fill: linear-gradient(#ffffff, #ffffff);
+  --sel: #ffffff; --gold: #ffcc33;
+}
+body { font-family: var(--font); }
+/* flatter ramps: no bright rim, small lip */
+.c-blue   { --ol: #000; --rim: transparent; --side: transparent; --top: #4fb7ff; --mid: #2f95ec; --bot: #2a86db; --lip: #1d5fa0; --lip2: #1d5fa0; --oc: #000; --lip-h: 6px; }
+.c-green  { --ol: #000; --rim: transparent; --side: transparent; --top: #62e36a; --mid: #3fca4a; --bot: #35b83f; --lip: #23812b; --lip2: #23812b; --oc: #000; --lip-h: 6px; }
+.c-red    { --ol: #000; --rim: transparent; --side: transparent; --top: #ff6b6b; --mid: #e84646; --bot: #d83a3a; --lip: #9a2424; --lip2: #9a2424; --oc: #000; --lip-h: 6px; }
+.c-yellow { --ol: #000; --rim: transparent; --side: transparent; --top: #ffd85c; --mid: #f7bf2a; --bot: #eeb21c; --lip: #a97a0c; --lip2: #a97a0c; --oc: #000; --lip-h: 6px; }
+.c-orange { --ol: #000; --rim: transparent; --side: transparent; --top: #ffa24f; --mid: #f5822a; --bot: #ea731c; --lip: #a54d0c; --lip2: #a54d0c; --oc: #000; --lip-h: 6px; }
+.c-purple { --ol: #000; --rim: transparent; --side: transparent; --top: #b880ff; --mid: #9b5cf0; --bot: #8c4be3; --lip: #5c2aa0; --lip2: #5c2aa0; --oc: #000; --lip-h: 6px; }
+.c-grey   { --ol: #000; --rim: transparent; --side: transparent; --top: #8d95a3; --mid: #6f7785; --bot: #646c7a; --lip: #3f4550; --lip2: #3f4550; --oc: #000; --lip-h: 6px; }
+.c-dark   { --ol: #000; --rim: transparent; --side: transparent; --top: #2a2e3d; --mid: #1f2230; --bot: #1a1d29; --lip: #0f111a; --lip2: #0f111a; --oc: #000; --lip-h: 6px; }
+.c-gold   { --ol: #000; --rim: transparent; --side: transparent; --top: #ffe07a; --mid: #ffc93a; --bot: #f5b81f; --lip: #b07c0a; --lip2: #b07c0a; --oc: #000; --lip-h: 6px; }

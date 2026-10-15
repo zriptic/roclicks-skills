@@ -1,0 +1,9 @@
+{
+  "cash": "Cash", "gem": "Gem", "shop": "Shopping Cart", "crate": "Crate",
+  "crate_gold": "Gold Crate", "crate_rainbow": "Rainbow Crate", "settings": "Settings",
+  "lock": "Lock", "check": "Checkmark", "target": "Target", "coin": "Coin",
+  "potion": "Potion", "backpack": "Backpack", "star": "Star", "gift": "Gift",
+  "bolt": "Bolt", "info": "Info", "warning": "Warning", "x": "X", "gem_blue": "Blue Gem",
+  "trophy": "Trophy", "magnet": "Magnet", "speed": "Running", "pass": "Gamepass",
+  "luck": "Luck", "time": "Hourglass"
+}

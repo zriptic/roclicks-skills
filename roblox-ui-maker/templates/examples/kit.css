@@ -1,0 +1,111 @@
+/* roblox-ui-maker base kit: ONE shared component per element type; only colours vary.
+   Stage = 1920x1080 absolute px (the Roblox design size). Everything here is understood by
+   scripts/dump.js: .ot (outlined text), .plate (stud plate -> raster art), .panel/.glass (native
+   glass frames), .tile, .bar (fill <i>), .badge, .hid (exported but starts hidden).
+   STRUCTURE ONLY. Every colour/size/texture is a token (CSS variable) defined by a style preset
+   (styles/stud.css = default, styles/glass.css) and tweaked per game in style.css, which is written
+   from the reference image (STYLE.md "Read the reference"). Load order: kit.css, preset, style.css. */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; background: #0b1410; overflow: hidden; }
+body { font-family: var(--font); font-weight: 800; color: #fff; }
+#wrap { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+#stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
+.abs { position: absolute; }
+.fill { left: 0; top: 0; right: 0; bottom: 0; }
+img { display: block; user-select: none; -webkit-user-drag: none; }
+.ic { position: absolute; object-fit: contain; filter: drop-shadow(0 3px 0 rgba(0,0,0,.35)); }
+.icn { object-fit: contain; display: block; filter: drop-shadow(0 3px 0 rgba(0,0,0,.35)); }
+.hid { opacity: 0; }   /* exported (Visible=false) so runtime can toggle it; NEVER use display:none for that */
+
+/* ---------- outlined text: the element paints outline + drop, ::after paints the fill ----------
+   Never put -webkit-text-stroke on the fill layer: Montserrat's overlapping contours draw lines
+   through P/M/X. data-t MUST equal the text (T() in build.py does this). */
+.ot {
+  position: relative; display: inline-block; white-space: nowrap; line-height: 1.05;
+  color: var(--oc, var(--text-ol, #121212));
+  -webkit-text-stroke: calc(var(--sw, 7px) * var(--stroke-k, 1)) var(--oc, var(--text-ol, #121212));
+  text-shadow: 0 calc(var(--dy, 3px) * var(--drop-k, 1)) 0 var(--oc, var(--text-ol, #121212));
+}
+.ot::after {
+  content: attr(data-t); position: absolute; left: 0; top: 0; white-space: nowrap;
+  -webkit-text-stroke: 0; text-shadow: none;
+  background: var(--fg, var(--text-fill, linear-gradient(#ffffff 52%, #e4e7ea)));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.ot.s { --sw: 5px; --dy: 2px; }
+.ot.xs { --sw: 4px; --dy: 2px; }
+.ot.l { --sw: 9px; --dy: 4px; }
+.ot.xl { --sw: 12px; --dy: 6px; }
+/* tinted fills: white top half, colour from mid-letter down */
+.f-green  { --fg: linear-gradient(#a8ff8a 10%, #3cf03a 55%, #16d424); }
+.f-red    { --fg: linear-gradient(#ff9aa0 10%, #ff4d57 55%, #e9323e); }
+.f-yellow { --fg: linear-gradient(#fff7a8 10%, #ffe54a 55%, #ffc61a); }
+.f-blue   { --fg: linear-gradient(#b4f2ff 10%, #45cfff 55%, #1fa6f0); }
+.f-purple { --fg: linear-gradient(#f2b6ff 10%, #d955ff 55%, #b02cf0); }
+.f-orange { --fg: linear-gradient(#ffd79a 10%, #ffab2e 55%, #ff8a00); }
+.f-gold   { --fg: linear-gradient(#fffbe0 5%, #ffe066 45%, #ffb300 80%, #ff9500); }
+.f-grey   { --fg: linear-gradient(#e8ecef, #b7bec4); }
+
+/* ---------- stud plate (buttons, tabs, headers): thin dark outline -> bright rim on all sides ->
+   vertical gradient -> darker bottom lip, with the ui-resources stud texture overlaid ---------- */
+.plate {
+  position: absolute; border-radius: var(--rad, var(--plate-rad, 20px));
+  border: var(--ow, var(--plate-ow, 6px)) solid var(--ol);
+  background:
+    linear-gradient(to bottom, var(--rim) 0, var(--rim) 2px, transparent 2px),
+    linear-gradient(to bottom, var(--top) 0%, var(--mid) 48%, var(--bot) calc(100% - var(--lip-h, 11px)), var(--lip) calc(100% - var(--lip-h, 11px)), var(--lip2) 100%);
+  box-shadow: inset 2px 0 0 var(--side), inset -2px 0 0 var(--side), 0 4px 0 rgba(0,0,0,.28);
+  overflow: hidden;
+}
+.plate::before { /* stud texture, overlay blend, kept off the lip */
+  content: ''; position: absolute; left: 0; right: 0; top: 0; bottom: var(--lip-h, 11px);
+  background: var(--stud-img, url(stud.png)) var(--sx, 3px) var(--sy, 4px) / var(--stud, 112px) var(--stud, 112px);
+  mix-blend-mode: var(--stud-blend, overlay); opacity: var(--stud-op, .95); pointer-events: none;
+}
+.head::before { opacity: var(--head-stud-op, var(--stud-op, .95)); }
+.plate > .lbl { position: absolute; left: 0; right: 0; top: 0; bottom: var(--lip-h, 11px); display: flex; align-items: center; justify-content: center; gap: 10px; z-index: 1; }
+.plate.sm { --ow: 4px; --rad: 14px; --lip-h: 7px; --stud: 84px; }
+.plate.xsm { --ow: 4px; --rad: 11px; --lip-h: 6px; --stud: 72px; }
+.plate.off { filter: saturate(.15) brightness(.82); }      /* locked / unaffordable */
+/* colour ramps (.c-blue, .c-green ...) live in the style preset */
+
+/* ---------- see-through glass panel (outer frame has NO fill of its own; ~0.75 black body) ---------- */
+.panel { position: absolute; border: var(--panel-bw, 7px) solid var(--panel-ol, var(--ink)); border-radius: var(--panel-rad, 30px); background: var(--glass);
+  box-shadow: inset 0 0 0 2px var(--glass-rim), 0 10px 0 rgba(0,0,0,.35); }
+.panel > .head { position: absolute; left: -7px; right: -7px; top: -7px; height: 104px; --rad: 30px 30px 18px 18px; --stud: 120px; }
+.panel > .head .lbl { justify-content: flex-start; padding-left: 34px; gap: 16px; }
+.closeb { position: absolute; width: 92px; height: 92px; top: -26px; right: -26px; z-index: 5; }
+.glass { position: absolute; border: 5px solid var(--panel-ol, var(--ink)); border-radius: calc(var(--panel-rad, 30px) * .73); background: var(--glass-card, rgba(8,14,22,.80));
+  box-shadow: inset 0 0 0 2px var(--glass-rim), 0 6px 0 rgba(0,0,0,.35); }
+.inset { position: absolute; border-radius: 18px; background: rgba(0,0,0,.32); box-shadow: inset 0 3px 0 rgba(0,0,0,.35); }
+
+/* ---------- light card / slot ---------- */
+.tile { position: absolute; border: 5px solid #0d1114; border-radius: 16px;
+  background: linear-gradient(#f6f9f8, #d3dfd7 18%, #ccd6cd 60%, #c3c8c2);
+  box-shadow: inset 0 0 0 3px #ffffff, 0 4px 0 rgba(0,0,0,.3); overflow: hidden; }
+.tile.dim { background: linear-gradient(#5d646a, #4b5157 60%, #41464b); box-shadow: inset 0 0 0 3px #7c858c, 0 4px 0 rgba(0,0,0,.3); }
+.tile.dim > img { filter: grayscale(1) brightness(.55) drop-shadow(0 3px 0 rgba(0,0,0,.3)); }
+.tile.gold { background: linear-gradient(#fff6c8, #ffe27a 40%, #ffc93a); box-shadow: inset 0 0 0 3px #fffbe6, 0 4px 0 rgba(0,0,0,.3); }
+.tile.sel { outline: 5px solid var(--sel); outline-offset: 2px; }
+
+/* ---------- red notification badge, bars, chips ---------- */
+.badge { position: absolute; width: 50px; height: 50px; border-radius: 50%; border: 5px solid #1b0204;
+  background: linear-gradient(#ff8a8f, #f2353f 60%, #c8202a); display: flex; align-items: center; justify-content: center; z-index: 3; }
+.bar { position: absolute; border: 4px solid var(--ink); border-radius: 12px; background: #1d252c; overflow: hidden; }
+.bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 8px 0 0 8px; }
+.g-green { background: linear-gradient(#7af25a, #2dd33a); }
+.g-gold  { background: linear-gradient(#ffe773, #ffb81c); }
+.g-blue  { background: linear-gradient(#7ee1ff, #24a7ef); }
+.g-red   { background: linear-gradient(#ff7e86, #e2333d); }
+
+/* ---------- design-only helpers (never exported) ---------- */
+.rbx { position: absolute; border: 4px dashed rgba(255,255,255,.55); border-radius: 50%; color: rgba(255,255,255,.7);
+  font: 600 22px var(--font2); display: flex; align-items: center; justify-content: center; text-align: center; }
+.cap { position: absolute; font: 600 22px var(--font2); color: rgba(255,255,255,.85); padding: 2px 12px;
+  border: 2px dashed rgba(255,255,255,.45); border-radius: 10px; background: rgba(0,0,0,.35); white-space: nowrap; }
+.world { position: absolute; inset: 0; background: linear-gradient(#7ec8f0 0, #bfe6f7 34%, #7bbf55 34.2%, #5fa53e 70%, #4c8f33); }
+.world::after { content: ''; position: absolute; left: 0; right: 0; top: 34%; bottom: 0; background: url(stud.png) 0 0 / 56px 56px; opacity: .35; mix-blend-mode: overlay; }
+.overflowing { outline: 3px solid #ff00ff !important; }
+/* state previews on sheet pages */
+.st-hover { transform: scale(1.06) translateY(-3px); }
+.st-press { transform: scale(.92) translateY(4px); }
