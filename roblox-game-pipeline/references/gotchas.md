@@ -62,6 +62,15 @@ keep a playbook, put the engineering details for them in
   data and re-bake at runtime (`editable-mesh` / MeshKit pattern). Published
   games need "Allow Mesh & Image APIs" turned on.
 - **`RunService.PreSimulation` doesn't fire in edit mode.**
+- **EditableMesh MeshParts made on the server render as plain boxes for
+  players, and in a Studio playtest the server and client share ONE
+  EditableMesh memory budget.** So the server builds plain boxes from baked
+  bounds and each client covers them with shared-mesh clones
+  (`references/meshlab.md`). Never build EditableMesh on the server; never
+  ApplyMesh per part.
+- **R15 rigs from `CreateHumanoidModelFromDescription` use AnimationConstraint
+  joints**: C0 is read-only, pose with `.Transform`, ragdoll by disabling
+  them, and limbs don't move in edit mode.
 
 ## Studio processes
 - **`manage_instance launch source=baseplate` has hung on macOS:** stray
@@ -79,8 +88,8 @@ keep a playbook, put the engineering details for them in
   - it needs `studio_id` from `list_roblox_studios`;
   - it takes a batch in one call.
   - Pack icons into one sprite sheet to save uploads.
-- **Keep the Open Cloud key outside the project** (a private key file such as
-  `<home>/.roblox_api_key`, or an environment variable). Read it inside the
+- **Keep the Open Cloud key outside the project** (a key file outside the
+  project, or an environment variable). Read it inside the
   command and never print it. Check its scopes: a key made only for developer
   products can't do anything else; a general key needs Assets,
   Universe-places, Data Stores and Messaging.

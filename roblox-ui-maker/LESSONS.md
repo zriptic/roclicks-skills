@@ -9,8 +9,7 @@ Format: **rule**, then why (what went wrong or what the developer said).
 
 ## 1. Sources, icons, licence
 
-- **Icons come ONLY from your icon pack (one vector pack per project; never mix packs), never emojis.** Use a
-  licensed pack the developer owns. - Emojis and
+- **Icons come ONLY from your licensed icon pack, one pack per project, never emojis.** Emojis and
   hand-drawn icons read as cheap next to pack art; mixing two packs (different line weight, perspective,
   palette) looks sloppy even when each icon is good.
 - **Search the whole pack before calling an icon missing** (its folder names / catalogue, then synonyms:
@@ -18,39 +17,39 @@ Format: **rule**, then why (what went wrong or what the developer said).
   "honey", target for "goal"); do not draw one.
 - **Read the pack's licence. If it forbids AI training, never send its PNGs to an image model.** Composite only.
 - **Never push or share a repo containing the raw pack** unless its licence allows redistribution. Commit the
-  slug list (`icons.json`) and the copy script, not the pack. - Most paid packs forbid redistribution.
-- **Prefer outlined variants** (if the pack has them) for outlined/stud styles. - They match the thick-outline
+  slug list (`icons.json`) and the copy script, not the pack. Most paid packs forbid redistribution.
+- **Prefer outlined variants** (if the pack has them) for outlined/stud styles. They match the thick-outline
   cartoon text.
 - **Textures, effects, backgrounds come from ui-resources.com first** (see UI_RESOURCES.md). Stud style MUST
-  carry the stud texture. - The developer's rule; studs are the signature of the look.
+  carry the stud texture. This is the developer's rule; studs are the signature of the look.
 - **ui-resources images lazy-load and some `.png` files are really WebP.** Read `img.currentSrc` after
   scrolling; run `file x.png`; convert with `sips -s format png in --out out.png` before any Roblox upload.
   - Roblox accepts PNG/JPG/BMP/TGA only; the ui-resources stud texture itself is a WebP named stud.png.
-- **Close buttons are a text "X" (white, black outline) on a red plate, never an icon.** The developer's rule.
+- **Close buttons are a text "X" (white, black outline) on a red plate, never an icon.** This is the developer's rule.
 - **Division of labour:** chrome (plates, panels, cards) = CSS or art with empty interiors and no text;
-  icons = the pack; every word = live text. - Baked text can never change; icons drawn into plates can't swap.
+  icons = the pack; every word = live text. Baked text can never change; icons drawn into plates can't swap.
 - **Never reproduce watermarks or designer logos** from a reference; treat them as noise when measuring.
 
 ## 2. Style comes from the reference
 
 - **A style reference image is required input.** Ask for one once if none was given. If the developer says
-  "just go", use the stud preset. - "The skill should need a reference image to figure out what style to make
-  it in, but most likely it's going to be stud style."
+  "just go", use the stud preset. The developer expects the skill to need a reference image to pick the style,
+  with stud style the most likely result.
 - **Read the reference into tokens before designing** (palette, panel shape, outline thickness, texture,
   font, buttons, icon treatment, density) and show the tokens sheet (`style.html`) with the first screen.
   - Guessed colours and outline widths were the main reason early screens looked "off".
 - **"Inspired by X" is not "remake X".** When a game is named only as a style reference, keep the vibe but
   change signature elements (panel shape, cap colours, trim, palette); offer 2-3 directions on the same screen
-  first. - "I don't want to copy the UI 1:1, let's find a slightly different style."
+  first. The developer wanted a slightly different style, not a 1:1 copy.
 - **World and UI share ONE style.** Decide it once per game and hold it for maps, props and every GUI.
-  - "It all needs to be in the same style" (a stud map with a sleek UI was rejected).
+  - A stud map with a sleek UI was rejected: everything has to share one style.
 - **When the developer names a game whose UI to copy, that game's UI style overrides the stud default** (flat, its
-  palette, its signature shapes), while the world can stay stud. - "full UI, look up the strongest battle ground and
-  copy their style of ui" (for a battlegrounds game: the reference's grey slots, crimson skewed bar).
+  palette, its signature shapes), while the world can stay stud. On a battlegrounds game the developer asked for the
+  full UI in the style of the strongest game in the genre (the reference's grey slots, crimson skewed bar).
 - **A LAYOUT reference is not a STYLE reference: when the developer names a game "for the layout, not the styling", copy its
   positions, sizes, grouping and what-shows-when nearly exactly, but keep the approved style tokens.** Build
-  components and states first; finalise screen positions only once the layout reference is read. - "follow <that game>'s
-  layout pretty much exactly, adapted a bit for our game, not the styling" (the stud style itself was liked).
+  components and states first; finalise screen positions only once the layout reference is read. The developer asked to follow
+  another game's layout almost exactly, adapted a little to the game, without its styling (the stud style itself was liked).
   Copy the reference's percentages, but keep this file's minimums (phone text >= 26, tap targets), and say
   where you scaled up. Big moments move where the reference puts them (headline line, world words), even if
   that removes screens you already built.
@@ -65,8 +64,8 @@ Format: **rule**, then why (what went wrong or what the developer said).
 ## 3. Consistency
 
 - **Same-type elements share ONE treatment**: all studded or none, same outline/rim/lip structure, same
-  gradient structure, decor centred. One shared component (`plate()`), vary only colour. - "Some of the
-  buttons are studs and some aren't... it's weird." Measurement noise is not a reason for inconsistency.
+  gradient structure, decor centred. One shared component (`plate()`), vary only colour. The developer
+  found it odd that some buttons had studs and some didn't. Measurement noise is not a reason for inconsistency.
 - **One toast style, one confirm dialog, one close button, one number formatter** across the game.
 - **Repeated elements reuse one measured gradient**; when gradient stops are absolute y values, shift them by
   each instance's offset or the second row renders washed out.
@@ -74,17 +73,17 @@ Format: **rule**, then why (what went wrong or what the developer said).
 ## 4. Text (the developer notices text first)
 
 - **World Robux prices: glyph and number in ONE label with NO space** (`"\u{E002}" .. n`). The glyph carries its own
-  side bearing, so "\u{E002} 50" reads as a gap; a separate glyph label never shares the baseline. - The developer:
-  a podium price with a space "looks weird".
+  side bearing, so "\u{E002} 50" reads as a gap; a separate glyph label never shares the baseline. The developer
+  found that a podium price with a space looked wrong.
 - **BillboardGui.StudsOffsetWorldSpace turns with the adornee's rotation** (measured: a sign part yawed 180 degrees
   mirrored a +Z offset to -Z, despite the docs). Convert world vectors with `adornee.CFrame:VectorToObjectSpace`.
 - **To keep a billboard from being covered by a model, slide it along the ray to the camera** (world offset
   `toCam.Unit * z` per frame, size scaled by (d - z)/d), not StudsOffset.Z (camera space: it drifts up the screen from
-  low angles) and not AlwaysOnTop (not drawn in captures). - A timer label was cut off by very large models.
+  low angles) and not AlwaysOnTop (not drawn in captures). A timer label was cut off by very large models.
 - **Odds/info text on a machine: transparent board, tier-coloured lines with a dark stroke, in the machine's FRONT
-  plane** (like the reference), never a card on the back wall where the displayed item hides it. - The developer's rule.
+  plane** (like the reference), never a card on the back wall where the displayed item hides it. This is the developer's rule.
 
-- **Robux prices use the Robux glyph, never "R$"**: `utf8.char(0xE002)` / `"\u{E002}"` in Luau (raw U+E002 inside long-string data). It renders as the Robux icon in FredokaOne, Gotham and BuilderSans. HTML can't show it, so mock it with a small Robux icon in the HTML and export the glyph text. - The developer: "use the robux text thing, not R$".
+- **Robux prices use the Robux glyph, never "R$"**: `utf8.char(0xE002)` / `"\u{E002}"` in Luau (raw U+E002 inside long-string data). It renders as the Robux icon in FredokaOne, Gotham and BuilderSans. HTML can't show it, so mock it with a small Robux icon in the HTML and export the glyph text. The developer asked for the Robux glyph instead of "R$".
 
 - **Display font: Montserrat 800 = the "Gotham Black" look** (900 reads too heavy); Fredoka One suits rounder
   games. Identify a reference's font by silhouette and stem width; must be a font Roblox has
@@ -101,9 +100,9 @@ Format: **rule**, then why (what went wrong or what the developer said).
 - **Phone minimums**: a 1920x1080 canvas shows at ~0.36x on a landscape phone: body text >= 26 design px,
   titles 40+, MinTextSize ~14 (6 came out ~2 px).
 - **Small text (under ~22 px) loses its outline/drop** when it gets crowded; one client found stroked small
-  text "crowded".
+  text too crowded.
 - **Price text on locked/unaffordable cards stays white and readable**: use a grey plate, not a desaturate
-  filter over the price. - The price is exactly what the player needs to read.
+  filter over the price. The price is exactly what the player needs to read.
 - **Don't add words that force TextScaled to shrink** ("$10/s net" shrank the label): show the value, or let the
   container grow (a subtitle may widen up to 1.8x instead of shrinking text).
 
@@ -127,7 +126,7 @@ Format: **rule**, then why (what went wrong or what the developer said).
 
 - **HUDs stay quiet**: only per-second info (main currency, one goal, health/energy, hotbar, 4-5 core buttons).
   Everything else behind a MORE drawer or in the screen that uses it. Counts become badges on their button.
-  - "Fix HUD because it's too much going on."
+  - The developer asked for the HUD to be fixed because too much was going on.
 - **Start a new player's HUD as cash + one Next-goal pill, reveal pieces when they start to matter** (gems after
   the first gem, capacity only while full, timers only while running); columns close up around hidden rows.
   - About 30 readouts were cut to this and kids understood it. CAUTION: one developer rejected hiding MENU rows in
@@ -136,7 +135,7 @@ Format: **rule**, then why (what went wrong or what the developer said).
   shipped as permanent noise.
 - **No permanent upsell buttons, no timer-driven nag tips.** Players read them as "you're doing it wrong".
 - **Immersive/horror HUDs: no panels over the world**: small outlined text on the scene, one objective,
-  meters on their button, see-through tap-sized buttons. - "I want UI to not be that invasive."
+  meters on their button, see-through tap-sized buttons. The developer wanted UI that isn't invasive.
 - **Design for thumbs**: tap targets >= 124 design px (~48 screen px), primary 150-190; draw Roblox's top bar,
   thumbstick and jump as dashed placeholders and keep clear; combat cluster under the right thumb; rarely used
   menus become world stands (walk-up prompts). Render a phone HUD and a PC HUD.
@@ -145,7 +144,7 @@ Format: **rule**, then why (what went wrong or what the developer said).
 - **Every PC action must exist on touch** (a missing prestige button soft-locked the loop on phones); hide key
   hints when `TouchEnabled and not KeyboardEnabled`.
 - **Roblox's top bar keeps its size while your UIScale shrinks**: push top-corner groups below
-  `GuiService.TopbarInset` at runtime (live, it settles after startup). - The HUD's top-left slid under the
+  `GuiService.TopbarInset` at runtime (live, it settles after startup). The HUD's top-left slid under the
   menu/chat buttons on phones.
 - **Toasts move when a screen opens** (dock to a free corner at ~0.6 scale, newest 2) and dock under the
   tutorial card when it shows.
@@ -153,7 +152,7 @@ Format: **rule**, then why (what went wrong or what the developer said).
 - **Fit to the ScreenGui's own canvas, not `Camera.ViewportSize`**: with ScreenInsets = DeviceSafeInsets the canvas is
   the safe area (notch phones lose ~60 px a side), so a Root sized from the viewport spills under the notch. One rule:
   s = min(safeW/1920, safeH/1080), x1.1 and a 5% title-safe margin when `IsTenFootInterface()`; refit on the
-  gui's AbsoluteSize change too (it settles after ViewportSize). - Phones and TVs were laid out for the wrong box.
+  gui's AbsoluteSize change too (it settles after ViewportSize). Phones and TVs were laid out for the wrong box.
 - **Lay out HUD groups by measured boxes, in one pass, including their tap UIScales**: slide a group along the top-bar
   row out of Roblox's buttons (drop below only if taller than the bar), re-centre a centred group between its row
   neighbours (shrink to ~0.85), drop anything else below what it hits. Per-corner pushes ignored tap scales: the
@@ -182,12 +181,12 @@ Format: **rule**, then why (what went wrong or what the developer said).
 
 - **"Remake this" = 1:1.** Only placeholder art the developer has no pack art for may differ. They check side by side.
 - **Build from scratch, never overlay on / cut plates from / inpaint the reference screenshot.** Rejected three times
-  ("make things from scratch and not overlay it"). The screenshot is only a measuring tape. A stand-in WORLD
+  (the developer asked for things made from scratch, not overlaid). The screenshot is only a measuring tape. A stand-in WORLD
   behind the UI may come from it.
 - **Measure, never eyeball**: edges from outline runs, gradients from per-row medians, text from ink boxes,
   stud pitch from template sharpness (`scripts/remake/measure.py`). Buttons get the same rigour as text.
 - **One panel at a time, score every region numerically and iterate before showing** (`scripts/remake/score.py`).
-  - "You are getting worse... the quest panel and settings panel was your best stuff."
+  - When this was skipped, quality dropped; the developer pointed back to the quest and settings panels as the best work.
 - **Verify at the density the developer views at (2x)**: `--force-device-scale-factor=2`.
 - **Calibrate plate colours in a closed loop** (`scripts/remake/calibrate_rows.py`): row error 7.4 -> 1.9.
 - **The "copy method" (only when the developer asks for it)**: panel art = their reference with ONLY text glyphs removed,
@@ -196,8 +195,8 @@ Format: **rule**, then why (what went wrong or what the developer said).
 ## 8. HTML authoring
 
 - **Every piece of UI goes through HTML first, including what game code builds at runtime** (toasts, tutorial
-  cards, build bars, billboards, touch buttons, banners). - "Any UI that wasn't made in HTML first, please make
-  in HTML... then let me check it."
+  cards, build bars, billboards, touch buttons, banners). The developer asked for any UI not made in HTML first to be
+  redone in HTML and checked by them first.
 - **Show every state** (normal, hover, pressed, locked, unaffordable, empty, full, loading, error, longest text,
   phone) on a sheet page AND each piece in context over a real game capture at realistic size.
 - **Fixed 1920x1080 stage, absolute px**; `?raw` = 1:1 for headless.
@@ -379,8 +378,8 @@ Format: **rule**, then why (what went wrong or what the developer said).
   placement and open panels; max one per 3 min; drop them (the action stays reachable from a menu).
 - **Queue reveals, never close a running one**; the busy flag stays until the queue is empty; failure paths
   also continue the queue.
-- **Never draw over the prize**: a reel's centre line through the winning tile was rejected ("remove the line
-  down the middle"). Mark the winner from the edges only (top/bottom markers, glow, scale).
+- **Never draw over the prize**: a reel's centre line through the winning tile was rejected (the developer
+  asked for the line to go). Mark the winner from the edges only (top/bottom markers, glow, scale).
 - **The developer's "RNG" = one horizontal crate reel**: rarity tiles, gold markers top and bottom, blurred
   background, fast whip then ease-out; x3 spins the same line three times into a tray. Near-misses are cosmetic
   only, never rigged pity tricks aimed at kids. "Satisfying" = tick sounds per tile, rarity-scaled landing juice.
@@ -397,8 +396,8 @@ Format: **rule**, then why (what went wrong or what the developer said).
 
 ## 22. World labels
 
-- **Studs-sized, grow UP, lift in CAMERA space** (`UIKit.worldLabel`): pixel billboards covered whole buildings
-  ("cover the whole building"); measured 37% -> 0% coverage. StudsOffset +Z pulls toward the camera (8 studs not
+- **Studs-sized, grow UP, lift in CAMERA space** (`UIKit.worldLabel`): pixel billboards covered whole buildings;
+  measured 37% -> 0% coverage. StudsOffset +Z pulls toward the camera (8 studs not
   enough from a low camera, 14 was).
 - **Declutter with priority** (actionable first, then important, then the rest; "+N" badge), merge same-side
   plates, cap sizes, range-limit status tags.
@@ -433,13 +432,56 @@ Format: **rule**, then why (what went wrong or what the developer said).
 - **Tool calls in one batch are unordered**: camera move + capture raced; sequence across calls.
 - **The developer often plays right after an import**: playtest only when asked; verify in edit mode otherwise.
 
+- **A tab whose `Opens` is its own panel must open, not toggle**: UI.toggle closed a team-management panel on its
+  own hub tab and the Shop on every shop tab. Game code that gates a button (no save -> team select) strips that
+  button's `Opens` so only one owner acts.
+- **Exported lists of state buttons are per-cell examples**: a shop cell held only the state the mock showed
+  (Buy in one, Equipped in another). Runtime must clone the missing variants into every cell before toggling.
+- **Demo text ships**: every label the mock filled must be overwritten or blanked at runtime (a no-save player saw
+  the mock's sample team, record and week, and thought Play was broken). Sweep with an edit-mode harness that
+  counts path misses.
+- **Recolouring a chip/badge recolours its LABEL too unless you separate them**: game code painted a tag chip's text
+  in the kind colour, the same colour as the chip, so "PASS"/"RUN" vanished. Chips: background = kind colour, text
+  white; every item gets a tag (no blank chip when a kind has no style).
+- **Data-driven slot names are positions, not roles**: a "HomeLogo / MyCity" column must show the SAME team for the
+  badge, name, record and stars; mixing home/away logic into one slot put the opponent's badge over your name.
+- **The demo sweep must check every screen, not only the ones you opened**: compare each label to its import text
+  and flag data-looking leftovers (cities, records, money, week/season). A wallet strip copied onto 7 panels showed
+  the mock's "$17.6M" on 6 of them.
+- **A bottom hint bar and a big bottom panel can't both show**: hide the hint bar while the picker is open (or lift
+  the panel), checked at 1920x1080 / 1366x768 / 844x390.
+- **fit() must skip full-screen groups** (a vignette pushed under the top bar) and keep centred panels clear of
+  Roblox's top-left buttons: slide right if there is room, else shrink under the bar; then drop any HUD group the
+  pushed one now overlaps (phone: badge onto the play menu).
+- **Team Create edit mode has a LocalPlayer but no PlayerGui**: harness code that hits `WaitForChild("PlayerGui")`
+  (UIKit.overlay, Toasts.init) hangs forever; stub them. Return ASCII from execute_luau: a multi-byte char cut by
+  string.sub made the MCP call time out.
+
 ## 25. Approved work (reuse these approaches)
 
 - The "runtime UI pass": sheet pages with every state + in-context pages over real Studio captures; toasts under
   the tutorial card; build bar inside the hotbar width; mobile actions in the right thumb column; tutorial arrow on
-  the side with room; medallion icons on panel buttons. - "The UI is good."
+  the side with room; medallion icons on panel buttons. The developer approved it as good.
 - A reference GAME VIDEO answered by: sampling its palette and recolouring the map first, Studio captures of
   the recoloured game as mockup backgrounds, real models rendered on a magenta backdrop and keyed into card art,
   the approved kit with the reference's ORGANISATION copied 1:1, world-placed systems moved out of menus.
+- A voice-comedy cooking HUD in the default stud preset with no style reference: recipe checklist card (done /
+  now / todo rows), countdown-timer pill, chaos pill, talk bar + no-mic Orders panel, start card, verdict panel with
+  stars, speech-bubble templates, all shown over a real Studio capture of the map. Approved on the first pass.
 - Presenting several flow options (phone + desktop shots, problems grid, comparison, recommendation) on one
   decision page before building the chosen flow.
+
+## 26. Flat "broadcast" styles (learned on a sports game copying another game's UI)
+- **A flat reference style (charcoal panels, coloured underline accents, Oswald) exports almost fully NATIVE**: build
+  accents as inset y-shadow bands (`box-shadow: inset 0 -4px 0 <c>` -> InnerShade), use `.ot` with no stroke and a solid
+  `::after` colour; only gauges/real images become art (3-5 uploads for 25 screens). Keep it that way: every raster
+  is an upload.
+- **mock.py has no Oswald (or other fonts it doesn't ship)**: mean diffs of 6-9 with matching geometry are font
+  fallback, not layout errors; check the cmp_*.png before "fixing".
+- **Roblox's Oswald runs ~6% narrower and taller than browser Oswald**: fit() caps big titles at TextSize 100 (fine)
+  and the sweep reports height-only TEXT_NOFIT for most labels (line metrics, no clipping). Judge width only.
+- **Studio caches `require` across execute_luau calls**: after replacing a Data_ module's Source, Clone the module
+  (and Builder) and require the clone, or buildScreen() rebuilds the old layout.
+- **When robloxstudio (import_rbxm) is down**: create the bundle's ModuleScripts in edit mode and set `.Source` from
+  `HttpService:GetAsync` of the preview server (`rbx/luau/*.luau`); restore HttpEnabled afterwards.
+- **Repeated tab labels must still get unique names** (six shop tabs all named after the screen they open collided).

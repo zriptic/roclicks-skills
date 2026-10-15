@@ -17,7 +17,8 @@ have one yet, skip the `PB` pointers below and start one as lessons come up.
 
 Companion skills named below (`studify`, `roblox-ui-maker`, `roblox-vfx`,
 `roblox-game-score`, `claude-music`, a design-advice skill,
-`jest-luau`, `scrapling`, `agent-browser`) are optional. If one
+`jest-luau`, `scrapling`, `agent-browser`) and the meshlab toolkit
+(github.com/zriptic/roclicks-skills, folder `meshlab/`) are optional. If one
 isn't installed, do that phase directly with the same "produces" and gate.
 
 ## Before anything
@@ -46,8 +47,8 @@ isn't installed, do that phase directly with the same "produces" and gate.
 |---|---|---|---|
 | 0 | **Concept / study** | `GAME.md` pitch + reference breakdown | a design-advice skill, `SK/references/study-a-game.md`, scrapling / agent-browser for research |
 | 1 | **Design + economy** | `PLAN.md`: core loop, progression, monetization, numbers; a pacing sim | design-advice skill, `PB/game-design/*`, a `sim/` script (Python or `luau`) |
-| 2 | **World** | Map in Studio, stud style | `studify`; `PB/building/*` |
-| 3 | **Models** | Meshes for what Parts can't do | Meshy MCP (organic shapes; quote credits first), blender MCP, `SK/references/models.md` |
+| 2 | **World** | Map in Studio, stud style, every visible piece a meshlab model | **meshlab** (`SK/references/meshlab.md`); layout code places baked models; `PB/building/*` for layout ideas |
+| 3 | **Models** | Every prop, building, vehicle and piece of character gear as meshlab models, baked to MeshData | **meshlab** (`SK/references/meshlab.md`, parallel modelling agents); SDF sculpt for creatures; Meshy/Blender only if the developer asks (`SK/references/models.md`) |
 | 4 | **Systems** | Server/client Luau: data, remotes, loop, products | `PB/engineering/*`, `jest-luau` for tests, `luau` CLI for pure logic |
 | 5 | **UI** | Every screen, HTML first, then a real ScreenGui | `roblox-ui-maker` (always; read its `LESSONS.md`) |
 | 6 | **VFX** | Particle effects for every key moment | `roblox-vfx` (read its `LESSONS.md`) |
@@ -89,8 +90,10 @@ models, music) and hand them back for import.
 - **Particles, not 3D objects,** for effects.
 - **HTML-first UI**, icons only from the project's chosen icon pack, never
   emojis.
-- **Parts for the world**, meshes only where Parts fail; no free models for
-  things that can be built.
+- **meshlab builds everything visible** (the developer's rule): world, props,
+  vehicles, gear. Parts only for invisible colliders, triggers, seats and
+  spawns. Bake to MeshData, and the client rebuilds + ApplyMeshes
+  (`SK/references/meshlab.md`). No free models.
 - **Verify yourself** with screenshots and measurements before showing the
   developer.
 - **Ask before spending** (Meshy credits, uploads, Robux-priced products) and

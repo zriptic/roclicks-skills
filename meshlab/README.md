@@ -38,4 +38,4 @@ camera distance. Seeded models take a seed: `lune run meshlab/run TreeBlob 3`.
 
 `BRIEF.md` is the brief to hand an AI agent before it models anything.
 
-Free to use and change in your own games.
+MIT licensed (see LICENSE): use and change it in your own games, free or paid.

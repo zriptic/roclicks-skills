@@ -8,11 +8,13 @@ outranks them; when one is broken on purpose, say so.
 - **Stud style is the default** (studify; Plastic with stud MaterialVariants on
   every face, chunky shapes broken up by small detail). Not a law: a ninja
   game was deliberately not stud.
-- **Parts for the world.** Meshes (Meshy, Blender) only for what Parts do
-  badly: creatures, characters, organic or curved props, hero props, vehicles.
-  Prompt Meshy for "chunky toy plastic, flat colours" so it sits beside studs.
-- **Detail props use EditableMesh** (wheels, gears, wings, rounded machines) in stud colours; plain Parts for the rest. Render meshes aren't saved: mesh spots + runtime bake (a MeshKit-style module in your project). Feedback on a pet-hatching game: "the spinner needs more detail".
-- **Measure colours from the reference** (median RGB of stills, compared against a Studio render under the real lighting), never eyeball. Feedback on the same game: "the colors are a bit off".
+- **meshlab builds everything visible** (the developer's rule: meshlab should
+  build everything). Buildings, roads, floors, props, vehicles, character gear:
+  all meshlab models, baked and rebuilt on clients (`references/meshlab.md`).
+  Parts only for invisible colliders/triggers/seats/spawns. SUPERSEDES the old
+  "Parts for the world, meshes only where Parts fail" rule.
+- **Detail props use EditableMesh** (wheels, gears, wings, rounded machines) in stud colours; plain Parts for the rest. Render meshes aren't saved: mesh spots + runtime bake (a MeshKit-style module in your project). Feedback on a pet-hatching game: the spinner needed more detail.
+- **Measure colours from the reference** (median RGB of stills, compared against a Studio render under the real lighting), never eyeball. Feedback on the same game: the colours were a bit off.
 - **No free Creator Store models** for anything that can be built. Another
   creator's mesh or image renders as nothing without permission (gotchas.md).
 - **One icon/vector pack per project.** Prefer purchased packs over generated

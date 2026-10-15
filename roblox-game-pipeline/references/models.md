@@ -1,7 +1,9 @@
 # Models (phase 3)
 
-**First ask whether Parts can do it** (studify). Most props, buildings and map
-pieces can, and stay in style for free. Model only what Parts do badly.
+**Default route: meshlab for everything** (`references/meshlab.md`). The Meshy
+and Blender routes below are only for when the developer asks for them or an
+organic hero model needs them. (Superseded: "first ask whether Parts can do
+it".)
 
 ## Routes
 | Need | Route |

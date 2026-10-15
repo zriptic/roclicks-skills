@@ -47,5 +47,6 @@ blender -b -P meshlab/render.py -- meshlab/out/Barrel.obj meshlab/out/Barrel.png
 - Guides, prompts and tricks: [roclicks.gg](https://roclicks.gg)
 - The same skills as single downloads: [roclicks.gg/skills](https://roclicks.gg/skills)
 
-Free to use and change in your own games. `roblox-vfx` is adapted from Roqer's skills and keeps
-their MIT licence in `LICENSE-ROQER-SKILLS.txt`.
+MIT licensed (see [LICENSE](LICENSE)): use and change them in your own games, free or paid.
+`roblox-vfx` is adapted from Roqer's skills and also keeps their MIT licence in
+`LICENSE-ROQER-SKILLS.txt`.
